@@ -63,13 +63,8 @@ const MusicPlayer: FC = () => {
       alignItems="center"
       width="100%"
       position="relative"
-      padding="32px 16px"
     >
-      <Track
-        isActive={isActive}
-        isPlaying={isPlaying}
-        activeSong={activeSong}
-      />
+      <Track activeSong={activeSong} />
       <Box
         display="flex"
         flex={1}
@@ -92,7 +87,9 @@ const MusicPlayer: FC = () => {
           value={appTime}
           min={0}
           max={duration}
-          onChange={(event) => setSeekTime(parseInt(event.target.value))}
+          onChange={(event) =>
+            setSeekTime(parseInt((event.target as HTMLInputElement)?.value))
+          }
           setSeekTime={setSeekTime}
           appTime={appTime}
         />
@@ -110,8 +107,10 @@ const MusicPlayer: FC = () => {
       <VolumeBar
         value={volume}
         min={0}
-        max={0}
-        onChange={(event) => setVolume(parseInt(event.target.value))}
+        max={1}
+        onChange={(event) =>
+          setVolume(parseFloat((event.target as HTMLInputElement)?.value))
+        }
         setVolume={setVolume}
       />
     </Box>

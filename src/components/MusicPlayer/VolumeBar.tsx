@@ -1,16 +1,36 @@
 'use client';
 
-import { Box } from '@mui/material';
-import { FC, ChangeEventHandler, SetStateAction, Dispatch } from 'react';
+import { Box, Slider } from '@mui/material';
+import { FC, SetStateAction, Dispatch } from 'react';
+import { styled } from '@mui/material/styles';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+
+const CustomSlider = styled(Slider)({
+  color: 'var(--white)',
+  marginLeft: '0.5rem',
+  width: '7rem',
+  height: '4px',
+  '&:hover .MuiSlider-thumb': {
+    display: 'block',
+  },
+  '&:hover .MuiSlider-track': {
+    color: 'var(--green)',
+  },
+  '& .MuiSlider-thumb': {
+    display: 'none',
+    '&:hover': {
+      boxShadow: 'none',
+    },
+  },
+});
 
 type VolumeBarProps = {
   value: number;
   min: number;
   max: number;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  onChange: (event: Event) => void;
   setVolume: Dispatch<SetStateAction<number>>;
 };
 
@@ -30,14 +50,13 @@ const VolumeBar: FC<VolumeBarProps> = ({
         <VolumeDownIcon onClick={() => setVolume(0)} />
       )}
       {value === 0 && <VolumeMuteIcon onClick={() => setVolume(1)} />}
-      <input
-        type="range"
-        step="any"
+      <CustomSlider
+        step={0.1}
         value={value}
         min={min}
         max={max}
+        size="small"
         onChange={onChange}
-        // className="2xl:w-40 lg:w-32 md:w-32 h-1 ml-2"
       />
     </Box>
   );

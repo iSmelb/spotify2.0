@@ -31,15 +31,13 @@ const Player: FC<PlayerProps> = ({
 }) => {
   const ref = useRef<HTMLAudioElement | null>(null);
   // eslint-disable-next-line no-unused-expressions
-  useEffect(() => {
-    if (ref.current && isPlaying) {
-      if (isPlaying) {
-        ref.current.play();
-      } else {
-        ref.current.pause();
-      }
+  if (ref.current) {
+    if (isPlaying) {
+      ref.current.play();
+    } else {
+      ref.current.pause();
     }
-  }, [isPlaying]);
+  }
 
   useEffect(() => {
     if (ref.current) {

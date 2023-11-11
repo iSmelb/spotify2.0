@@ -36,28 +36,36 @@ const Controls: FC<Controls> = ({
       display="flex"
       alignItems="center"
       justifyContent="space-around"
-      width={20}
+      width="15rem"
+      sx={{
+        '& svg': {
+          cursor: 'pointer',
+          pointerEvents: !!currentSongs.length ? 'initial' : 'none',
+          color: !!currentSongs.length ? 'inherit' : 'var(--gray)',
+        },
+        '& >svg:hover': {
+          opacity: 0.7,
+        },
+      }}
     >
       <LoopIcon
         sx={{
-          color: repeat ? 'red' : 'white',
+          color: repeat ? 'var(--green)' : 'white',
         }}
         onClick={() => setRepeat((prev) => !prev)}
       />
-      {currentSongs?.length && (
-        <SkipPreviousIcon fontSize="large" onClick={handlePrevSong} />
-      )}
+      {<SkipPreviousIcon fontSize="large" onClick={handlePrevSong} />}
+
       {isPlaying ? (
         <PauseCircleFilledIcon fontSize="large" onClick={handlePlayPause} />
       ) : (
         <PlayCircleFilledIcon fontSize="large" onClick={handlePlayPause} />
       )}
-      {currentSongs?.length && (
-        <SkipNextIcon fontSize="large" onClick={handleNextSong} />
-      )}
+
+      {<SkipNextIcon fontSize="large" onClick={handleNextSong} />}
       <ShuffleIcon
         sx={{
-          color: shuffle ? 'red' : 'white',
+          color: shuffle ? 'var(--green)' : 'white',
         }}
         onClick={() => setShuffle((prev) => !prev)}
       />

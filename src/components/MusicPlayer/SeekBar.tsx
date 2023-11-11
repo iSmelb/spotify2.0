@@ -1,13 +1,34 @@
 'use client';
 
-import { Box, Button, Input, Typography } from '@mui/material';
+import { Box, Button, Slider, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { FC, SetStateAction, Dispatch, ChangeEventHandler } from 'react';
+
+const CustomSlider = styled(Slider)({
+  color: 'var(--white)',
+  width: '20rem',
+  margin: '0 1rem',
+  height: '4px',
+
+  '&:hover .MuiSlider-thumb': {
+    display: 'block',
+  },
+  '&:hover .MuiSlider-track': {
+    color: 'var(--green)',
+  },
+  '& .MuiSlider-thumb': {
+    display: 'none',
+    '&:hover': {
+      boxShadow: 'none',
+    },
+  },
+});
 
 type SeekBarProps = {
   value: number;
   min: number;
   max: number;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  onChange: (event: Event) => void;
   setSeekTime: Dispatch<SetStateAction<number>>;
   appTime: number;
 };
@@ -28,27 +49,26 @@ const SeekBar: FC<SeekBarProps> = ({
       <Button
         type="button"
         onClick={() => setSeekTime(appTime - 5)}
-        sx={{ marginRight: 4 }}
+        sx={{ marginRight: 2, minWidth: '0', color: 'var(--green)' }}
       >
         -
       </Button>
       <Typography paragraph>{value === 0 ? '0:00' : getTime(value)}</Typography>
 
-      <input
-        type="range"
-        step="any"
+      <CustomSlider
+        step={1}
         value={value}
         min={min}
         max={max}
+        size="small"
         onChange={onChange}
-        // className="md:block w-24 md:w-56 2xl:w-96 h-1 mx-4 2xl:mx-6 rounded-lg"
       />
 
       <Typography paragraph>{value === 0 ? '0:00' : getTime(max)}</Typography>
       <Button
         type="button"
         onClick={() => setSeekTime(appTime + 5)}
-        sx={{ marginLeft: 4 }}
+        sx={{ marginLeft: 2, minWidth: '0', color: 'var(--green)' }}
       >
         +
       </Button>
