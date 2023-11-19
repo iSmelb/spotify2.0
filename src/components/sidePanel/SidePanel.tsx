@@ -14,6 +14,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import Link from 'next/link';
 
 interface ISidePanel {}
 
@@ -46,6 +47,12 @@ const Drawer = styled(MuiDrawer, {
   '& .MuiButtonBase-root': {
     gap: 20,
     padding: 0,
+    color: 'inherit',
+    border: '1px solid transparent',
+
+    '&:focus': {
+      borderColor: 'var(--white)',
+    },
 
     '&:hover': {
       backgroundColor: 'transparent',
@@ -74,7 +81,7 @@ const SidePanel: FC<ISidePanel> = (props) => {
         <nav className={cl.side_navigation}>
           <List>
             <ListItem>
-              <ListItemButton>
+              <ListItemButton LinkComponent={Link} href="/" disableTouchRipple>
                 <ListItemIcon>
                   <HomeIcon />
                 </ListItemIcon>
