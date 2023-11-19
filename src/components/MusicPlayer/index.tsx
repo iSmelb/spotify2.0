@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
 import { RootState } from '@/redux/store';
 import { Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +26,7 @@ const MusicPlayer: FC = () => {
     if (currentSongs.length) dispatch(playPause(true));
   }, [currentIndex]);
 
-  const handlePlayPause = (): void => {
+  const handlePlayPause = useCallback((): void => {
     if (!isActive) return;
 
     if (isPlaying) {
@@ -34,9 +34,9 @@ const MusicPlayer: FC = () => {
     } else {
       dispatch(playPause(true));
     }
-  };
+  }, [isActive, isPlaying]);
 
-  const handleNextSong = (): void => {
+  const handleNextSong = useCallback((): void => {
     dispatch(playPause(false));
 
     if (!shuffle) {
@@ -44,9 +44,9 @@ const MusicPlayer: FC = () => {
     } else {
       dispatch(nextSong(Math.floor(Math.random() * currentSongs.length)));
     }
-  };
+  }, [shuffle, currentIndex, currentSongs]);
 
-  const handlePrevSong = (): void => {
+  const handlePrevSong = useCallback((): void => {
     if (currentIndex === 0) {
       dispatch(prevSong(currentSongs.length - 1));
     } else if (shuffle) {
@@ -54,7 +54,11 @@ const MusicPlayer: FC = () => {
     } else {
       dispatch(prevSong(currentIndex - 1));
     }
-  };
+  }, [currentIndex, shuffle, currentSongs]);
+
+  const changeVolume = useCallback((event: Event) => {
+    setVolume(parseFloat((event.target as HTMLInputElement)?.value));
+  }, []);
 
   return (
     <Box
@@ -108,9 +112,7 @@ const MusicPlayer: FC = () => {
         value={volume}
         min={0}
         max={1}
-        onChange={(event) =>
-          setVolume(parseFloat((event.target as HTMLInputElement)?.value))
-        }
+        onChange={changeVolume}
         setVolume={setVolume}
       />
     </Box>

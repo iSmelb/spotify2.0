@@ -49,7 +49,12 @@ const SeekBar: FC<SeekBarProps> = ({
       <Button
         type="button"
         onClick={() => setSeekTime(appTime - 5)}
-        sx={{ marginRight: 2, minWidth: '0', color: 'var(--green)' }}
+        sx={{
+          marginRight: 2,
+          minWidth: '0',
+          color: 'var(--green)',
+          pointerEvents: appTime ? 'initial' : 'none',
+        }}
       >
         -
       </Button>
@@ -68,7 +73,12 @@ const SeekBar: FC<SeekBarProps> = ({
       <Button
         type="button"
         onClick={() => setSeekTime(appTime + 5)}
-        sx={{ marginLeft: 2, minWidth: '0', color: 'var(--green)' }}
+        sx={{
+          marginLeft: 2,
+          minWidth: '0',
+          color: 'var(--green)',
+          pointerEvents: appTime ? 'initial' : 'none',
+        }}
       >
         +
       </Button>

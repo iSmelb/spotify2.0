@@ -4,19 +4,21 @@ import { IPlayerState } from '@/redux/reducers/PlayerSlice';
 import { Track } from '@/redux/services/types';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 type TrackProps = Pick<IPlayerState, 'activeSong'>;
 
-const Track: FC<TrackProps> = ({ activeSong }) => {
+const Track: FC<TrackProps> = memo(({ activeSong }) => {
   return (
     <Box display="flex" alignItems="center" flex={1}>
       <Box width="56px" height="56px" mr={2} position="relative">
-        <Image
-          src={(activeSong as Track)?.images?.coverart}
-          fill
-          alt="cover art"
-        />
+        {(activeSong as Track)?.images?.coverart && (
+          <Image
+            src={(activeSong as Track)?.images?.coverart}
+            fill
+            alt="cover art"
+          />
+        )}
       </Box>
       <Box
         width="50%"
@@ -52,6 +54,6 @@ const Track: FC<TrackProps> = ({ activeSong }) => {
       </Box>
     </Box>
   );
-};
+});
 
 export default Track;
