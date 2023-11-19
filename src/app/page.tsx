@@ -1,45 +1,66 @@
 'use client';
 
 import { NextPage } from 'next';
-import { genres } from '../data/genres';
-import { Box, FormControl, MenuItem, Select } from '@mui/material';
+import { data, genres } from '../data/genres';
+import {
+  Box,
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
 import SongCard from '@/components/songCard/SongCard';
 import { useGetTopChartsQuery } from '@/redux/services/shazamCore';
 import Loading from '@/components/loading/loading';
 import ErrorWrapper from '@/components/error/error';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { useState } from 'react';
 
 const HomePage: NextPage = () => {
-  const genreTitle = 'POP';
+  const [genreTitle, setGenreTitle] = useState(genres[0].value);
+  const limit = 3;
+  const { activeSong, isPlaying } = useSelector(
+    (state: RootState) => state.player,
+  );
 
-  // const { data, isFetching, error } = useGetTopChartsQuery(null);
+  // const { data, isFetching, error } = useGetTopChartsQuery({
+  //   genre: genreTitle,
+  // });
 
-  // console.log(data);
+  const handleChange = (event: SelectChangeEvent) => {
+    setGenreTitle(event.target.value as string);
+  };
 
   // if (isFetching) return <Loading />;
 
   // if (error) return <ErrorWrapper error={error} />;
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      padding="8px"
-      borderRadius="8px"
-      sx={{ backgroundColor: 'var(--light_black)' }}
-    >
+    <Box display="flex" flexDirection="column" padding="0.5rem">
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <h2>Discover {genreTitle}</h2>
         <FormControl
           sx={{
             '& .MuiSelect-select': {
               padding: '10px',
+              color: 'var(--white)',
+            },
+            '& .MuiSvgIcon-root': {
+              color: 'var(--white)',
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'var(--white)',
+            },
+            '& .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'rgba(255, 255, 255, 0.7)',
             },
           }}
         >
           <Select
-            onChange={() => {}}
-            defaultValue={genreTitle}
+            onChange={handleChange}
             inputProps={{ 'aria-label': 'Without label' }}
+            value={genreTitle}
           >
             {genres.map((genre) => (
               <MenuItem key={genre.value} value={genre.value}>
@@ -56,13 +77,16 @@ const HomePage: NextPage = () => {
         gap="32px"
         justifyContent="center"
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-          (song, i) => (
-            <SongCard key={song.key} i={i} song={song}>
-              song
-            </SongCard>
-          ),
-        )}
+        {data?.tracks.map((song, i) => (
+          <SongCard
+            key={song.key}
+            i={i}
+            song={song}
+            isPlaying={isPlaying}
+            activeSong={activeSong}
+            data={data}
+          />
+        ))}
       </Box>
     </Box>
   );
