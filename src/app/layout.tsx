@@ -19,13 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <CssBaseline />
         <Providers>
           <div className="wrapper">
             <SidePanel />
             <div className="main_window">
               <Header />
-              <main className="main">{children}</main>
+              <main className="main">
+                <div className="content">{children}</div>
+              </main>
               <Footer />
             </div>
           </div>
