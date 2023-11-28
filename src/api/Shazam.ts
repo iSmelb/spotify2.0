@@ -25,9 +25,7 @@ export default class ShazamService {
           'X-RapidAPI-Host': this.hostName || '',
           'X-RapidAPI-Key': this.apiKey,
         },
-        next: {
-          revalidate: 86400,
-        },
+        cache: 'no-store',
       },
     );
 
