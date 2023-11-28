@@ -1,7 +1,7 @@
 'use client';
 
 import { IPlayerState } from '@/redux/reducers/PlayerSlice';
-import { Track } from '@/redux/services/types';
+import { Track } from '@/types/types';
 import {
   FC,
   useRef,
@@ -53,7 +53,11 @@ const Player: FC<PlayerProps> = ({
 
   return (
     <audio
-      src={(activeSong as Track)?.hub?.actions[1]?.uri}
+      src={
+        (activeSong as Track)?.hub?.actions
+          ? (activeSong as Track)?.hub?.actions[1]?.uri
+          : (activeSong as Track)?.hub?.options[0]?.actions[1]?.uri
+      }
       ref={ref}
       loop={repeat}
       onEnded={onEnded}

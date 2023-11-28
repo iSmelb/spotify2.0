@@ -1,7 +1,7 @@
 'use client';
 
 import { IPlayerState } from '@/redux/reducers/PlayerSlice';
-import { Track } from '@/redux/services/types';
+import { Track } from '@/types/types';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 import { FC, memo } from 'react';
@@ -17,6 +17,7 @@ const Track: FC<TrackProps> = memo(({ activeSong }) => {
             src={(activeSong as Track)?.images?.coverart}
             fill
             alt="cover art"
+            sizes="100vw"
           />
         )}
       </Box>

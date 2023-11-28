@@ -1,6 +1,6 @@
 'use client';
 
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { FC, SetStateAction, Dispatch, MouseEventHandler, memo } from 'react';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -39,37 +39,77 @@ const Controls: FC<Controls> = memo(
         justifyContent="space-around"
         width="15rem"
         sx={{
-          '& svg': {
-            cursor: 'pointer',
-            pointerEvents: !!currentSongs.length ? 'initial' : 'none',
-            color: !!currentSongs.length ? '' : 'var(--gray)',
+          '& .MuiButtonBase-root': {
+            color: 'inherit',
+            padding: 0,
+            width: '24px',
+            height: '24px',
+
+            '&.large': {
+              height: '35px',
+              width: '35px',
+            },
           },
-          '& >svg:hover': {
+          '& >.MuiButtonBase-root:hover': {
             opacity: 0.7,
+          },
+          '& >.MuiButtonBase-root:focus-visible': {
+            outline: '2px solid var(--white)',
+          },
+          '& .MuiButtonBase-root:disabled': {
+            color: 'var(--gray)',
+          },
+          '& .MuiSvgIcon-root': {
+            width: '100%',
+            height: '100%',
           },
         }}
       >
-        <LoopIcon
-          sx={{
-            color: repeat ? 'var(--green)' : 'white',
-          }}
+        <IconButton
+          disabled={!currentSongs.length}
           onClick={() => setRepeat((prev) => !prev)}
-        />
-        {<SkipPreviousIcon fontSize="large" onClick={handlePrevSong} />}
+        >
+          <LoopIcon
+            sx={{
+              color: repeat ? 'var(--green)' : 'inherit',
+            }}
+          />
+        </IconButton>
 
-        {isPlaying ? (
-          <PauseCircleFilledIcon fontSize="large" onClick={handlePlayPause} />
-        ) : (
-          <PlayCircleFilledIcon fontSize="large" onClick={handlePlayPause} />
-        )}
+        <IconButton
+          className="large"
+          disabled={!currentSongs.length}
+          onClick={handlePrevSong}
+        >
+          <SkipPreviousIcon />
+        </IconButton>
 
-        {<SkipNextIcon fontSize="large" onClick={handleNextSong} />}
-        <ShuffleIcon
-          sx={{
-            color: shuffle ? 'var(--green)' : 'white',
-          }}
+        <IconButton
+          className="large"
+          disabled={!currentSongs.length}
+          onClick={handlePlayPause}
+        >
+          {isPlaying ? <PauseCircleFilledIcon /> : <PlayCircleFilledIcon />}
+        </IconButton>
+
+        <IconButton
+          className="large"
+          disabled={!currentSongs.length}
+          onClick={handleNextSong}
+        >
+          <SkipNextIcon />
+        </IconButton>
+
+        <IconButton
+          disabled={!currentSongs.length}
           onClick={() => setShuffle((prev) => !prev)}
-        />
+        >
+          <ShuffleIcon
+            sx={{
+              color: shuffle ? 'var(--green)' : 'inherit',
+            }}
+          />
+        </IconButton>
       </Box>
     );
   },

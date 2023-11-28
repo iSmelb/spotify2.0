@@ -2,7 +2,7 @@
 
 import { Box, Button, Slider, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { FC, SetStateAction, Dispatch, ChangeEventHandler } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 
 const CustomSlider = styled(Slider)({
   color: 'var(--white)',
