@@ -26,7 +26,7 @@ const AroundYouPage: NextPage = () => {
           setLocation(res.country);
         } else {
           setIsError(
-            new Error('if you use adblock, please turn off it and try again'),
+            new Error('If you use adblock, please turn off it and try again'),
           );
         }
       });
@@ -38,9 +38,14 @@ const AroundYouPage: NextPage = () => {
 
   useUpdateTitle(location, [location]);
 
-  if (fetching) return <Loading />;
-
   if (error || isError) return <ErrorWrapper error={error || isError} />;
+
+  if (!fetching && !location)
+    return (
+      <Typography display="flex" justifyContent="center">
+        If you use adblock, please turn off it and try again
+      </Typography>
+    );
 
   return (
     <Box p="1rem">
@@ -49,7 +54,9 @@ const AroundYouPage: NextPage = () => {
           Listen popular music in {location}
         </Typography>
       )}
-      {fetching || (isFetching && <Loading />)}
+
+      {(fetching || isFetching) && <Loading />}
+
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fill, 200px)"
