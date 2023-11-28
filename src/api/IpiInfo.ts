@@ -13,13 +13,9 @@ type ipInfo = {
 export default class IpInfoService {
   static getUseInfo = async (): Promise<ipInfo> => {
     const response = await fetch(
-      `https://ipinfo.io/json?token=${process.env.IPI_INFO_TOKEN}`,
-      {
-        cache: 'no-store',
-      },
+      `https://ipinfo.io/json?token=${process.env.NEXT_PUBLIC_IPI_INFO_TOKEN}`,
     );
 
-    if (response.status !== 200) throw new Error(response.statusText);
     return response.json();
   };
 }

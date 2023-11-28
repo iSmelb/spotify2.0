@@ -1,41 +1,62 @@
+'use client';
+
 import IpInfoService from '@/api/IpiInfo';
-import ShazamService from '@/api/Shazam';
+import ErrorWrapper from '@/components/error/error';
+import Loading from '@/components/loading/loading';
 import MusicLists from '@/components/musicLists/MusicLists';
+import { useUpdateTitle } from '@/hooks/useUpdateTitle';
+import { useGetSongsByCountryQuery } from '@/redux/services/shazamCore';
 import { Box, Typography } from '@mui/material';
-import { Metadata, NextPage } from 'next';
+import { NextPage } from 'next';
+import { useEffect, useState } from 'react';
 
-export const generateMetadata = async (): Promise<Metadata> => {
-  try {
-    const location = await IpInfoService.getUseInfo();
+const AroundYouPage: NextPage = () => {
+  const [location, setLocation] = useState('');
+  const [isError, setIsError] = useState<Error | null>(null);
+  const [fetching, setFetching] = useState(true);
 
-    return {
-      title: location.country,
-      description: 'Listen popular music in ' + location.country,
-    };
-  } catch (error) {
-    return {
-      title: 'error',
-      description: '',
-    };
-  }
-};
+  const { data, isFetching, error } = useGetSongsByCountryQuery(location, {
+    skip: !location,
+  });
 
-const AroundYouPage: NextPage = async () => {
-  const location = await IpInfoService.getUseInfo();
-  const data = await ShazamService.getSongsByCountry(location.country);
+  useEffect(() => {
+    try {
+      IpInfoService.getUseInfo().then((res) => {
+        if (res.country) {
+          setLocation(res.country);
+        } else {
+          setIsError(
+            new Error('if you use adblock, please turn off it and try again'),
+          );
+        }
+      });
+    } catch (error) {
+    } finally {
+      setFetching(false);
+    }
+  }, []);
+
+  useUpdateTitle(location, [location]);
+
+  if (fetching) return <Loading />;
+
+  if (error || isError) return <ErrorWrapper error={error || isError} />;
 
   return (
     <Box p="1rem">
-      <Typography variant="h4" mb="1rem">
-        Listen popular music in {location.country}
-      </Typography>
+      {location && (
+        <Typography variant="h4" mb="1rem">
+          Listen popular music in {location}
+        </Typography>
+      )}
+      {fetching || (isFetching && <Loading />)}
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fill, 200px)"
         gap="32px"
         justifyContent="center"
       >
-        <MusicLists data={data} />
+        {data && <MusicLists data={data} />}
       </Box>
     </Box>
   );

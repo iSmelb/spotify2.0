@@ -54,7 +54,15 @@ export const shazamCoreApi = createApi({
     getBySearch: builder.query<ISearchResult, string | null>({
       query: (query) => `search?term=${query}&limit=50`,
     }),
+    getSongsByCountry: builder.query<RootObject, string>({
+      query: (country) =>
+        `charts/get-top-songs-in_country_by_genre?country_code=${country}&genre=POP&limit=50`,
+    }),
   }),
 });
 
-export const { useGetTopChartsQuery, useGetBySearchQuery } = shazamCoreApi;
+export const {
+  useGetTopChartsQuery,
+  useGetBySearchQuery,
+  useGetSongsByCountryQuery,
+} = shazamCoreApi;

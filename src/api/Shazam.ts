@@ -16,23 +16,6 @@ export default class ShazamService {
 
   static apiKey = process.env.NEXT_PUBLIC_API_KEY || '';
 
-  static getSongsByCountry = async (country: string): Promise<RootObject> => {
-    const response = await fetch(
-      `${this.baseUrl}charts/get-top-songs-in_country_by_genre?country_code=${country}&genre=POP&limit=50`,
-      {
-        method: 'GET',
-        headers: {
-          'X-RapidAPI-Host': this.hostName || '',
-          'X-RapidAPI-Key': this.apiKey,
-        },
-        cache: 'no-store',
-      },
-    );
-
-    if (response.status !== 200) throw new Error(response.statusText);
-    return response.json();
-  };
-
   static getArtistDetails = async (id: string): Promise<IArtistDetails> => {
     const response = await fetch(`${this.baseUrl}artist/get-details?id=${id}`, {
       method: 'GET',
