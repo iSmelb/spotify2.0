@@ -1,21 +1,15 @@
-'use client';
-
+import { Metadata, ResolvingMetadata } from 'next';
 import DetailsHeader from '@/components/detailsHeader/DetailsHeader';
 import ErrorWrapper from '@/components/error/error';
 import Loading from '@/components/loading/loading';
 import PlayPause from '@/components/playPause/PlayPause';
 import RelatedSongs from '@/components/relatedSongs/RelatedSongs';
-import { data, songDetails } from '@/data/genres';
-import {
-  useGetListRecomendationQuery,
-  useGetSongDetailsQuery,
-} from '@/redux/services/shazamCore';
-import { RootState } from '@/redux/store';
-import useHandlePauseClick from '@/utils/usePause';
-import useHandlePlayClick from '@/utils/usePlay';
 import { Box, Typography } from '@mui/material';
 import { NextPage } from 'next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useUpdateTitle } from '@/hooks/useUpdateTitle';
+import ShazamService from '@/api/Shazam';
+import PlaySeparateSong from '@/components/PlaySeparateSong/PlaySeparateSong';
 
 type SongProps = {
   params: {
@@ -23,33 +17,34 @@ type SongProps = {
   };
 };
 
-const SongPage: NextPage<SongProps> = ({ params: { id } }) => {
-  const { activeSong, isPlaying } = useSelector(
-    (state: RootState) => state.player,
-  );
+export const generateMetadata = async ({
+  params,
+}: SongProps): Promise<Metadata> => {
+  const { id } = params;
 
-  // const {
-  //   data: songDetails,
-  //   isFetching: songFetching,
-  //   isError: songError,
-  // } = useGetSongDetailsQuery(id);
-  // const {
-  //   data,
-  //   isFetching: listRecomendationFetch,
-  //   isError,
-  // } = useGetListRecomendationQuery(id);
+  try {
+    const song = await ShazamService.getSongDetails(id);
 
-  const handlePauseClick = useHandlePauseClick();
-  const handlePlayClick = useHandlePlayClick({
-    song: songDetails,
-    data,
-    i: -1,
-  });
+    return {
+      title: song.title,
+      description: `Find out all about ${song.title} and listel similar songs`,
+    };
+  } catch (error) {
+    return {
+      title: 'error',
+      description: '',
+    };
+  }
+};
 
-  // if (songFetching || listRecomendationFetch) return <Loading />;
+const SongPage: NextPage<SongProps> = async ({ params: { id } }) => {
+  const songDetailsData = ShazamService.getSongDetails(id);
+  const recomedtationListData = ShazamService.getListRecomendation(id);
 
-  // if (songError || isError)
-  //   return <ErrorWrapper error={songError || isError} />;
+  const [songDetails, recomedtationList] = await Promise.all([
+    songDetailsData,
+    recomedtationListData,
+  ]);
 
   return (
     <Box display="flex" flexDirection="column" p="0.5rem">
@@ -58,13 +53,7 @@ const SongPage: NextPage<SongProps> = ({ params: { id } }) => {
       </Box>
 
       <Box p="0.5rem">
-        <PlayPause
-          song={songDetails}
-          handlePause={handlePauseClick}
-          handlePlay={handlePlayClick}
-          isPlaying={isPlaying}
-          activeSong={activeSong}
-        />
+        <PlaySeparateSong song={songDetails} data={recomedtationList} />
       </Box>
 
       <Box p="0 0.5rem" display="flex" justifyContent="space-between">
@@ -90,11 +79,7 @@ const SongPage: NextPage<SongProps> = ({ params: { id } }) => {
           </Box>
         </Box>
 
-        <RelatedSongs
-          data={data}
-          isPlaying={isPlaying}
-          activeSong={activeSong}
-        />
+        <RelatedSongs data={recomedtationList} />
       </Box>
     </Box>
   );

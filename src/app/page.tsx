@@ -1,45 +1,46 @@
 'use client';
 
-import { NextPage } from 'next';
-import { data, genres } from '../data/genres';
+import ErrorWrapper from '@/components/error/error';
+import Loading from '@/components/loading/loading';
+import MusicLists from '@/components/musicLists/MusicLists';
+import { useGetTopChartsQuery } from '@/redux/services/shazamCore';
 import {
   Box,
   FormControl,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Typography,
 } from '@mui/material';
-import SongCard from '@/components/songCard/SongCard';
-import { useGetTopChartsQuery } from '@/redux/services/shazamCore';
-import Loading from '@/components/loading/loading';
-import ErrorWrapper from '@/components/error/error';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import { NextPage } from 'next';
 import { useState } from 'react';
+import { genres } from '../data/genres';
 
 const HomePage: NextPage = () => {
   const [genreTitle, setGenreTitle] = useState(genres[0].value);
-  const limit = 3;
-  const { activeSong, isPlaying } = useSelector(
-    (state: RootState) => state.player,
-  );
 
-  // const { data, isFetching, error } = useGetTopChartsQuery({
-  //   genre: genreTitle,
-  // });
+  const { data, isFetching, error } = useGetTopChartsQuery({
+    genre: genreTitle,
+    limit: 50,
+  });
 
   const handleChange = (event: SelectChangeEvent) => {
     setGenreTitle(event.target.value as string);
   };
 
-  // if (isFetching) return <Loading />;
+  if (isFetching) return <Loading />;
 
-  // if (error) return <ErrorWrapper error={error} />;
+  if (error) return <ErrorWrapper error={error} />;
 
   return (
     <Box display="flex" flexDirection="column" padding="0.5rem">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <h2>Discover {genreTitle}</h2>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb="1rem"
+      >
+        <Typography variant="h4">Discover {genreTitle}</Typography>
         <FormControl
           sx={{
             '& .MuiSelect-select': {
@@ -77,16 +78,7 @@ const HomePage: NextPage = () => {
         gap="32px"
         justifyContent="center"
       >
-        {data?.tracks.map((song, i) => (
-          <SongCard
-            key={song.key}
-            i={i}
-            song={song}
-            isPlaying={isPlaying}
-            activeSong={activeSong}
-            data={data}
-          />
-        ))}
+        {data && <MusicLists data={data} />}
       </Box>
     </Box>
   );

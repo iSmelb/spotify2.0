@@ -1,52 +1,8 @@
-'use client';
-
+import ShazamService from '@/api/Shazam';
 import DetailsHeader from '@/components/detailsHeader/DetailsHeader';
-import ErrorWrapper from '@/components/error/error';
-import Loading from '@/components/loading/loading';
 import RelatedSongs from '@/components/relatedSongs/RelatedSongs';
-import { artistDetails, data, songDetails, topSongs } from '@/data/genres';
-import {
-  useGetArtistDetailsQuery,
-  useGetArtistTopSongsQuery,
-} from '@/redux/services/shazamCore';
-import { RootState } from '@/redux/store';
-import useHandlePauseClick from '@/utils/usePause';
-import useHandlePlayClick from '@/utils/usePlay';
-import { Box, Typography } from '@mui/material';
-import { NextPage } from 'next';
-import { useSelector } from 'react-redux';
-import { ITopSong } from '@/redux/services/typeTopSongs';
-
-export class ModifyTrack {
-  hub: {
-    actions: Array<{ uri?: string }>;
-  };
-  images: {
-    coverart: string;
-  };
-  title: string;
-  subtitle: string;
-  key: string;
-
-  constructor(topSong: ITopSong) {
-    this.hub = {
-      actions: [
-        {},
-        {
-          uri: topSong.attributes?.previews[0]?.url,
-        },
-      ],
-    };
-    this.images = {
-      coverart: topSong.attributes?.artwork?.url
-        .replace('{w}', '125')
-        .replace('{h}', '125'),
-    };
-    this.title = topSong.attributes?.name;
-    this.subtitle = topSong.attributes?.artistName;
-    this.key = topSong.id;
-  }
-}
+import { Box } from '@mui/material';
+import { Metadata, NextPage } from 'next';
 
 type ArtistProps = {
   params: {
@@ -54,33 +10,34 @@ type ArtistProps = {
   };
 };
 
-const ArtistPage: NextPage<ArtistProps> = ({ params: { id } }) => {
-  const { activeSong, isPlaying } = useSelector(
-    (state: RootState) => state.player,
-  );
+export const generateMetadata = async ({
+  params,
+}: ArtistProps): Promise<Metadata> => {
+  const { id } = params;
 
-  // const {
-  //   data,
-  //   isFetching,
-  //   isError,
-  // } = useGetArtistDetailsQuery(id);
+  try {
+    const artist = await ShazamService.getArtistDetails(id);
 
-  // const {
-  //   data: topSongs,
-  //   isFetching: fetchTopSongs,
-  //   isError: topSongsError,
-  // } = useGetArtistTopSongsQuery(id)
+    return {
+      title: artist.data[0]?.attributes.name,
+      description: 'Find out all about ' + artist.data[0]?.attributes.name,
+    };
+  } catch (error) {
+    return {
+      title: 'error',
+      description: '',
+    };
+  }
+};
 
-  const modifySongs = {
-    next: '-',
-    properties: {},
-    tracks: topSongs.data.map((song) => new ModifyTrack(song)) || [],
-  };
+const ArtistPage: NextPage<ArtistProps> = async ({ params: { id } }) => {
+  const artistDetailsData = ShazamService.getArtistDetails(id);
+  const dataTopSongs = ShazamService.getArtistTopSongs(id);
 
-  // if (isFetching || fetchTopSongs) return <Loading />;
-
-  // if (isError || topSongsError)
-  //   return <ErrorWrapper error={isError || topSongsError} />;
+  const [artistDetails, topSongs] = await Promise.all([
+    artistDetailsData,
+    dataTopSongs,
+  ]);
 
   return (
     <Box display="flex" flexDirection="column" p="0.5rem">
@@ -88,11 +45,7 @@ const ArtistPage: NextPage<ArtistProps> = ({ params: { id } }) => {
         <DetailsHeader detailsData={artistDetails} />
       </Box>
       <Box p="0.5rem" mt="2rem">
-        <RelatedSongs
-          data={modifySongs}
-          isPlaying={isPlaying}
-          activeSong={activeSong}
-        />
+        <RelatedSongs data={topSongs} />
       </Box>
     </Box>
   );
