@@ -8,10 +8,12 @@ interface IErrorWrapper {
 }
 
 const ErrorWrapper: FC<IErrorWrapper> = ({ error }) => {
+  console.log(error);
+
   return (
     <Box display="flex" alignItems="center" flexDirection="column">
-      <h1>{error.status}</h1>
-      <h2>Oops!!! {error.data?.message}</h2>
+      <h4>{error?.status || error?.message}</h4>
+      <h2>Oops, something went wrong!!!</h2>
     </Box>
   );
 };

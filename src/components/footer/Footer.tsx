@@ -1,9 +1,7 @@
 import { FC } from 'react';
 import MusicPlayer from '../MusicPlayer';
 
-interface IFooter {}
-
-const Footer: FC<IFooter> = (props) => {
+const Footer: FC = () => {
   return (
     <footer>
       <MusicPlayer />

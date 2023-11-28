@@ -1,9 +1,9 @@
 import { playPause, setActiveSong } from '@/redux/reducers/PlayerSlice';
 import { useDispatch } from 'react-redux';
 import { useCallback, MouseEventHandler } from 'react';
-import { RootObject, Track } from '@/redux/services/types';
-import { ITrackDetails } from '@/redux/services/typesSong';
-import { ModifyTrack } from '@/app/artists/[id]/page';
+import { RootObject, Track } from '@/types/types';
+import { ITrackDetails } from '@/types/typesSong';
+import { ModifyTrack } from '@/types/ModifyTrack';
 
 interface IHandlePlay {
   song: Track | ITrackDetails | ModifyTrack;

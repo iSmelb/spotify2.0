@@ -14,7 +14,9 @@ import MuiDrawer from '@mui/material/Drawer';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface ISidePanel {}
 
@@ -50,8 +52,15 @@ const Drawer = styled(MuiDrawer, {
     color: 'inherit',
     border: '1px solid transparent',
 
-    '&:focus': {
+    '&:focus-visible': {
       borderColor: 'var(--white)',
+    },
+    '&:-moz-focusring': {
+      borderColor: 'var(--white)',
+    },
+
+    '&.active': {
+      color: 'var(--white)',
     },
 
     '&:hover': {
@@ -70,6 +79,7 @@ const Drawer = styled(MuiDrawer, {
 
 const SidePanel: FC<ISidePanel> = (props) => {
   const [open, setOpen] = useState(true);
+  const pathName = usePathname();
 
   const handleDrawer = (): void => {
     setOpen(!open);
@@ -81,7 +91,12 @@ const SidePanel: FC<ISidePanel> = (props) => {
         <nav className={cl.side_navigation}>
           <List>
             <ListItem>
-              <ListItemButton LinkComponent={Link} href="/" disableTouchRipple>
+              <ListItemButton
+                className={pathName === '/' ? 'active' : ''}
+                LinkComponent={Link}
+                href="/"
+                disableTouchRipple
+              >
                 <ListItemIcon>
                   <HomeIcon />
                 </ListItemIcon>
@@ -90,7 +105,12 @@ const SidePanel: FC<ISidePanel> = (props) => {
             </ListItem>
 
             <ListItem>
-              <ListItemButton>
+              <ListItemButton
+                className={pathName === '/search' ? 'active' : ''}
+                LinkComponent={Link}
+                href="/search"
+                disableTouchRipple
+              >
                 <ListItemIcon>
                   <SearchIcon />
                 </ListItemIcon>
@@ -100,12 +120,26 @@ const SidePanel: FC<ISidePanel> = (props) => {
           </List>
 
           <List>
-            <ListItem>
-              <ListItemButton onClick={handleDrawer}>
+            <ListItem title={open ? 'close media' : 'open media'}>
+              <ListItemButton onClick={handleDrawer} disableTouchRipple>
                 <ListItemIcon>
                   <LibraryMusicIcon />
                 </ListItemIcon>
                 <ListItemText primary="My media" />
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem>
+              <ListItemButton
+                className={pathName === '/around-you' ? 'active' : ''}
+                LinkComponent={Link}
+                href="/around-you"
+                disableTouchRipple
+              >
+                <ListItemIcon>
+                  <LocationOnIcon />
+                </ListItemIcon>
+                <ListItemText primary="Top around you" />
               </ListItemButton>
             </ListItem>
           </List>

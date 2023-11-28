@@ -1,4 +1,4 @@
-import { RootObject, Track } from '@/redux/services/types';
+import { RootObject, Track } from '@/types/types';
 import { IPlayerState } from '@/redux/reducers/PlayerSlice';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
@@ -7,10 +7,11 @@ import { FC } from 'react';
 import PlayPause from '../playPause/PlayPause';
 import useHandlePauseClick from '@/utils/usePause';
 import useHandlePlayClick from '@/utils/usePlay';
+import { ModifyTrack } from '@/types/ModifyTrack';
 
 type ISongCard = Pick<IPlayerState, 'isPlaying' | 'activeSong'> & {
   i: number;
-  song: Track;
+  song: Track | ModifyTrack;
   data: RootObject;
 };
 
@@ -33,6 +34,7 @@ const SongCard: FC<ISongCard> = ({ i, song, isPlaying, activeSong, data }) => {
       }}
     >
       <Box
+        className="skeleton"
         position="relative"
         height="200px"
         borderRadius="4px"
@@ -78,7 +80,7 @@ const SongCard: FC<ISongCard> = ({ i, song, isPlaying, activeSong, data }) => {
             activeSong={activeSong}
           />
         </Box>
-        <Image alt="song_img" fill src={song.images?.coverart} />
+        <Image alt="song_img" fill src={song.images?.coverart} sizes="100vw" />
       </Box>
 
       <Box
@@ -106,9 +108,9 @@ const SongCard: FC<ISongCard> = ({ i, song, isPlaying, activeSong, data }) => {
         <Typography paragraph fontSize={12} color="var(--gray)">
           <Link
             href={
-              song.artists
+              !!song.artists.length
                 ? `/artists/${song?.artists[0]?.adamid}`
-                : '/top-artists'
+                : '/'
             }
           >
             {song.subtitle}

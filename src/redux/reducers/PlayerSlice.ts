@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { RootObject, Track } from '../services/types';
-import { ITrackDetails } from '../services/typesSong';
-import { ModifyTrack } from '@/app/artists/[id]/page';
+import { RootObject, Track } from '@/types/types';
+import { ITrackDetails } from '@/types/typesSong';
+import { ModifyTrack } from '@/types/ModifyTrack';
 
 export interface IPlayerState {
   currentSongs: Track[] | ModifyTrack[] | [];

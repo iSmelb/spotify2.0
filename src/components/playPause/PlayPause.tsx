@@ -1,11 +1,11 @@
 import { IPlayerState } from '@/redux/reducers/PlayerSlice';
-import { Track } from '@/redux/services/types';
+import { Track } from '@/types/types';
 import { FC, MouseEventHandler } from 'react';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import { Box, IconButton } from '@mui/material';
-import { ITrackDetails } from '@/redux/services/typesSong';
-import { ModifyTrack } from '@/app/artists/[id]/page';
+import { ITrackDetails } from '@/types/typesSong';
+import { ModifyTrack } from '@/types/ModifyTrack';
 
 type IPlayPause = Pick<IPlayerState, 'isPlaying' | 'activeSong'> & {
   song: Track | ITrackDetails | ModifyTrack;
@@ -29,7 +29,7 @@ const PlayPause: FC<IPlayPause> = ({
 
   return (
     <Box display="flex" position="relative">
-      {isPlaying && (activeSong as Track)?.title === song.title ? (
+      {isPlaying && (activeSong as Track)?.key === song.key ? (
         <IconButton
           onClick={handlePause}
           sx={{
@@ -68,6 +68,7 @@ const PlayPause: FC<IPlayPause> = ({
         </IconButton>
       ) : (
         <IconButton
+          disabled={!song?.hub?.actions}
           onClick={handlePlay}
           sx={{
             color: 'var(--green)',

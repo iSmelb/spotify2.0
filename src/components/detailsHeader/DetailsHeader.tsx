@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Box, Typography } from '@mui/material';
-import { ITrackDetails } from '@/redux/services/typesSong';
-import { IArtistDetails } from '@/redux/services/typesArtist';
+import { ITrackDetails } from '@/types/typesSong';
+import { IArtistDetails } from '@/types/typesArtist';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,10 +15,14 @@ const DetailsHeader: FC<IDetailsHeader> = ({ detailsData }) => {
   return (
     <Box display="flex" padding="0 0.5rem 0.5rem">
       <Box
+        className="skeleton"
         mr="1rem"
         sx={{
           borderRadius: isArtist ? '50%' : 'initial',
           overflow: 'hidden',
+          width: '232px',
+          height: '232px',
+          position: 'relative',
         }}
       >
         <Image
@@ -30,8 +34,8 @@ const DetailsHeader: FC<IDetailsHeader> = ({ detailsData }) => {
                   .replace('{h}', '500')
               : detailsData?.images?.coverart
           }
-          width={232}
-          height={232}
+          fill
+          sizes="100vw"
         />
       </Box>
       <Box
@@ -54,7 +58,7 @@ const DetailsHeader: FC<IDetailsHeader> = ({ detailsData }) => {
             ? detailsData.data[0]?.attributes?.name
             : detailsData?.title}
         </Typography>
-        {!isArtist && (
+        {!isArtist && !!detailsData?.artists.length && (
           <Link href={`/artists/${detailsData?.artists[0]?.adamid}`}>
             <Typography mb="0.5rem" variant="h3">
               {detailsData?.subtitle}

@@ -1,8 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootObject } from './types';
-import { ITrackDetails } from './typesSong';
-import { IArtistDetails } from './typesArtist';
-import { ITopSongs } from './typeTopSongs';
+import { RootObject } from '@/types/types';
+import { ISearchResult } from '@/types/typesSearch';
+
+const baseUrl =
+  process.env.NODE_ENV === 'development'
+    ? process.env.NEXT_PUBLIC_SHAZAM_CORE_URL
+    : process.env.NEXT_PUBLIC_SHAZAM_URL;
+
+const hostName =
+  process.env.NODE_ENV === 'development'
+    ? process.env.NEXT_PUBLIC_SHAZAM_CORE_HOST_NAME
+    : process.env.NEXT_PUBLIC_SHAZAM_HOST_NAME;
 
 type QueryParams = {
   genre: string;
@@ -22,12 +30,12 @@ const generateQueryStr = (baseString: string, query: QueryParams): string => {
 export const shazamCoreApi = createApi({
   reducerPath: 'shazamCoreApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://shazam-core7.p.rapidapi.com/',
+    baseUrl: baseUrl,
     prepareHeaders: (headers) => {
-      headers.set(
-        'X-RapidAPI-Key',
-        'ee9d38ea63mshbc70c57df52799dp17f7dcjsnf76227f4ba1e',
-      );
+      const apiKey = process.env.NEXT_PUBLIC_API_KEY || '';
+
+      headers.set('X-RapidAPI-Key', apiKey);
+      headers.set('X-RapidAPI-Host', hostName || '');
 
       return headers;
     },
@@ -43,25 +51,10 @@ export const shazamCoreApi = createApi({
         return { url: queryStr };
       },
     }),
-    getSongDetails: builder.query<ITrackDetails, string>({
-      query: (id) => `songs/get_details?id=${id}`,
-    }),
-    getListRecomendation: builder.query<RootObject, string>({
-      query: (id) => `songs/list-recommendations?id=${id}&limit=10`,
-    }),
-    getArtistDetails: builder.query<IArtistDetails, string>({
-      query: (id) => `artist/get-details?id=${id}`,
-    }),
-    getArtistTopSongs: builder.query<ITopSongs, string>({
-      query: (id) => `artist/get-top-songs?id=${id}`,
+    getBySearch: builder.query<ISearchResult, string | null>({
+      query: (query) => `search?term=${query}&limit=50`,
     }),
   }),
 });
 
-export const {
-  useGetTopChartsQuery,
-  useGetSongDetailsQuery,
-  useGetListRecomendationQuery,
-  useGetArtistDetailsQuery,
-  useGetArtistTopSongsQuery,
-} = shazamCoreApi;
+export const { useGetTopChartsQuery, useGetBySearchQuery } = shazamCoreApi;
