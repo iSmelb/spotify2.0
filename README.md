@@ -1,34 +1,5 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+A small copy of Spotify, written entirely on a bunch of Next js + TypeScript. The application implements a player, with the ability to rewind, switch songs, repeat, as well as enable random order. When you go to a particular song or artist, there is a request on the server side, which allows you to get a ready page with SEO optimization, as well as cache the result of the response. On the "around-you" page page, there is a request to get data about the user with the help of the service ..[ipinfo.io](https://ipinfo.io/) so if you don't want to reveal your location, use a VPN. Then the result of the most popular songs in your country is displayed. 
+All songs have a shortened version due to the use of free [Api](https://rapidapi.com/yourdevmail/api/shazam-api7).
