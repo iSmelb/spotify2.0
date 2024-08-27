@@ -1,6 +1,7 @@
 import ShazamService from '@/api/Shazam';
 import DetailsHeader from '@/components/detailsHeader/DetailsHeader';
 import RelatedSongs from '@/components/relatedSongs/RelatedSongs';
+import { artistDetails, topSongs } from '@/data/fakeData';
 import { Box } from '@mui/material';
 import { Metadata, NextPage } from 'next';
 
@@ -34,10 +35,10 @@ const ArtistPage: NextPage<ArtistProps> = async ({ params: { id } }) => {
   const artistDetailsData = ShazamService.getArtistDetails(id);
   const dataTopSongs = ShazamService.getArtistTopSongs(id);
 
-  const [artistDetails, topSongs] = await Promise.all([
-    artistDetailsData,
-    dataTopSongs,
-  ]);
+  // const [artistDetails, topSongs] = await Promise.all([
+  //   artistDetailsData,
+  //   dataTopSongs,
+  // ]);
 
   return (
     <Box display="flex" flexDirection="column" p="0.5rem">

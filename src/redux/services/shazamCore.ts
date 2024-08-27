@@ -3,12 +3,12 @@ import { RootObject } from '@/types/types';
 import { ISearchResult } from '@/types/typesSearch';
 
 const baseUrl =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV !== 'development'
     ? process.env.NEXT_PUBLIC_SHAZAM_CORE_URL
     : process.env.NEXT_PUBLIC_SHAZAM_URL;
 
 const hostName =
-  process.env.NODE_ENV === 'development'
+  process.env.NODE_ENV !== 'development'
     ? process.env.NEXT_PUBLIC_SHAZAM_CORE_HOST_NAME
     : process.env.NEXT_PUBLIC_SHAZAM_HOST_NAME;
 

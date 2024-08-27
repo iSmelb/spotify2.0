@@ -15,22 +15,24 @@ import {
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { genres } from '../data/genres';
+import { data } from '@/data/fakeData';
 
 const HomePage: NextPage = () => {
   const [genreTitle, setGenreTitle] = useState(genres[0].value);
 
-  const { data, isFetching, error } = useGetTopChartsQuery({
-    genre: genreTitle,
-    limit: 50,
-  });
+  // const { data, isFetching, error } = useGetTopChartsQuery({
+  //   genre: genreTitle,
+  //   limit: 50,
+  // });
+  // console.log(data);
 
   const handleChange = (event: SelectChangeEvent) => {
     setGenreTitle(event.target.value as string);
   };
 
-  if (isFetching) return <Loading />;
+  // if (isFetching) return <Loading />;
 
-  if (error) return <ErrorWrapper error={error} />;
+  // if (error) return <ErrorWrapper error={error} />;
 
   return (
     <Box display="flex" flexDirection="column" padding="0.5rem">
@@ -41,6 +43,9 @@ const HomePage: NextPage = () => {
         mb="1rem"
       >
         <Typography variant="h4">Discover {genreTitle}</Typography>
+        <Typography style={{ color: 'red', textTransform: 'uppercase' }}>
+          due to api changes, the project lost its functionality
+        </Typography>
         <FormControl
           sx={{
             '& .MuiSelect-select': {

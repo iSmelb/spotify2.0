@@ -49,14 +49,14 @@ const SearchPage: NextPage = () => {
 
   useUpdateTitle(`search ${search || ''}`, [search]);
 
-  if (isFetching) return <Loading />;
+  // if (isFetching) return <Loading />;
 
   return (
     <Box p="1rem">
       {error && <ErrorWrapper error={error} />}
       {isUninitialized ? (
         <Box display="flex" justifyContent="center">
-          What do you want to listen to?
+          search dont avaible
         </Box>
       ) : (
         <>

@@ -15,9 +15,9 @@ const AroundYouPage: NextPage = () => {
   const [isError, setIsError] = useState<Error | null>(null);
   const [fetching, setFetching] = useState(true);
 
-  const { data, isFetching, error } = useGetSongsByCountryQuery(location, {
-    skip: !location,
-  });
+  // const { data, isFetching, error } = useGetSongsByCountryQuery(location, {
+  //   skip: !location,
+  // });
 
   useEffect(() => {
     try {
@@ -38,14 +38,12 @@ const AroundYouPage: NextPage = () => {
 
   useUpdateTitle(location, [location]);
 
-  if (error || isError) return <ErrorWrapper error={error || isError} />;
-
-  if (!fetching && !location)
-    return (
-      <Typography display="flex" justifyContent="center">
-        If you use adblock, please turn off it and try again
-      </Typography>
-    );
+  // if (error || isError) return <ErrorWrapper error={error || isError} />;
+  return (
+    <Typography display="flex" justifyContent="center">
+      If you use adblock, please turn off it and try again
+    </Typography>
+  );
 
   return (
     <Box p="1rem">

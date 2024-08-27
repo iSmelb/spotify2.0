@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useUpdateTitle } from '@/hooks/useUpdateTitle';
 import ShazamService from '@/api/Shazam';
 import PlaySeparateSong from '@/components/PlaySeparateSong/PlaySeparateSong';
+import { songDetails, topSongs } from '@/data/fakeData';
 
 type SongProps = {
   params: {
@@ -38,13 +39,15 @@ export const generateMetadata = async ({
 };
 
 const SongPage: NextPage<SongProps> = async ({ params: { id } }) => {
-  const songDetailsData = ShazamService.getSongDetails(id);
-  const recomedtationListData = ShazamService.getListRecomendation(id);
+  // const songDetailsData = ShazamService.getSongDetails(id);
+  // const recomedtationListData = ShazamService.getListRecomendation(id);
 
-  const [songDetails, recomedtationList] = await Promise.all([
-    songDetailsData,
-    recomedtationListData,
-  ]);
+  // const [songDetails, recomedtationList] = await Promise.all([
+  //   songDetailsData,
+  //   recomedtationListData,
+  // ]);
+
+  const recomedtationList = topSongs;
 
   return (
     <Box display="flex" flexDirection="column" p="0.5rem">
