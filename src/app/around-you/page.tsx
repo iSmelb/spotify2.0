@@ -45,26 +45,26 @@ const AroundYouPage: NextPage = () => {
     </Typography>
   );
 
-  return (
-    <Box p="1rem">
-      {location && (
-        <Typography variant="h4" mb="1rem">
-          Listen popular music in {location}
-        </Typography>
-      )}
+  // return (
+  //   <Box p="1rem">
+  //     {location && (
+  //       <Typography variant="h4" mb="1rem">
+  //         Listen popular music in {location}
+  //       </Typography>
+  //     )}
 
-      {(fetching || isFetching) && <Loading />}
+  //     {(fetching || isFetching) && <Loading />}
 
-      <Box
-        display="grid"
-        gridTemplateColumns="repeat(auto-fill, 200px)"
-        gap="32px"
-        justifyContent="center"
-      >
-        {data && <MusicLists data={data} />}
-      </Box>
-    </Box>
-  );
+  //     <Box
+  //       display="grid"
+  //       gridTemplateColumns="repeat(auto-fill, 200px)"
+  //       gap="32px"
+  //       justifyContent="center"
+  //     >
+  //       {data && <MusicLists data={data} />}
+  //     </Box>
+  //   </Box>
+  // );
 };
 
 export default AroundYouPage;
