@@ -15,7 +15,7 @@ import {
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { genres } from '../data/genres';
-import { data } from '@/data/fakeData';
+import { data } from '../data/fakeData';
 
 const HomePage: NextPage = () => {
   const [genreTitle, setGenreTitle] = useState(genres[0].value);
